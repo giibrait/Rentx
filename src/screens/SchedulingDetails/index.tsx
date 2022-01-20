@@ -3,7 +3,10 @@ import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import { Accessory } from '../../components/Accessory';
 import { Button } from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+
+import { Feather } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useTheme } from 'styled-components';
 
 import speedSvg from '../../assets/speed.svg';
 import accelerationSvg from '../../assets/acceleration.svg';
@@ -24,19 +27,23 @@ import {
     Rent,
     Period,
     Price,
-    About,
     Accessories,
-    Footer
+    Footer,
+    RentalPeriod,
+    CalendarIcon,
+    DateInfo,
+    DateTitle,
+    DateValue,
+    RentalPrice,
+    RentalPriceLabel,
+    RentalPriceDetails,
+    RentalPriceQuota,
+    RentalPriceTotal,
 
 } from './styles';
 
-export function CarDetails() {
-    const navigation = useNavigation();
-    function handleConfirmRental() {
-        navigation.navigate('Scheduling')
-
-    }
-
+export function SchedulingDetails() {
+    const theme = useTheme();
     return (
         <Container>
             <Header>
@@ -69,15 +76,40 @@ export function CarDetails() {
                     <Accessory name="Auto" icon={exchangeSvg} />
                     <Accessory name="2 pessoas" icon={peopleSvg} />
                 </Accessories>
-                <About>
-                    Este é automóvel desportivo. Surgiu do lendário touro de lide indultado
-                    na praça Real Maestranza de Sevilla.
-                    É um belíssimo carro para quem gosta de acelerar.
+                <RentalPeriod>
+                    <CalendarIcon>
+                        <Feather
+                            name="calendar"
+                            size={RFValue(24)}
+                            color={theme.colors.shape}
+                        />
+                    </CalendarIcon>
+                    <DateInfo>
+                        <DateTitle>DE</DateTitle>
+                        <DateValue>20/01/2022</DateValue>
+                    </DateInfo>
+                    <Feather
+                        name="chevron-right"
+                        size={RFValue(10)}
+                        color={theme.colors.text}
+                    />
+                    <DateInfo>
+                        <DateTitle>ATÉ</DateTitle>
+                        <DateValue>20/01/2022</DateValue>
+                    </DateInfo>
 
-                </About>
+                </RentalPeriod>
+                <RentalPrice>
+                    <RentalPriceLabel>TOTAL</RentalPriceLabel>
+                    <RentalPriceDetails>
+                        <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
+                        <RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+                    </RentalPriceDetails>
+
+                </RentalPrice>
             </Content>
             <Footer>
-                <Button title="Confirmar" onPress={handleConfirmRental} />
+                <Button title="Confirmar" />
             </Footer>
         </Container>
     );
