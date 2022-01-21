@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from 'styled-components';
 import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import ArrowSvg from '../../assets/arrow.svg'
 
 import { BackButton } from '../../components/BackButton';
 import { Button } from '../../components/Button';
-import { Calendar } from '../../components/Calendar';
+import {
+    Calendar,
+    DayProps,
+    generateInterval,
+    MarkedDateProps
+} from '../../components/Calendar';
 
 import {
     Container,
@@ -19,9 +25,38 @@ import {
     Content,
     Footer,
 } from './styles';
+import { DateCallbackHandler } from 'react-native-calendars';
 
 export function Scheduling() {
+    const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>({} as DayProps);
+    const [markedDates, setMarkedDates] = useState<MarkedDateProps>({} as MarkedDateProps);
+
     const theme = useTheme();
+    const navigation = useNavigation();
+
+    function handleConfirmRental() {
+        navigation.navigate('SchedulingDetails')
+    }
+
+    function handleBack() {
+        navigation.goBack();
+    }
+
+    function handleChangeDate(date: DayProps) {
+        console.log(date);
+        let start = !lastSelectedDate.timeStamp ? date : lastSelectedDate;
+        let end = date;
+
+        if (start.timeStamp > end.timeStamp) {
+            start = end;
+            end = start;
+        }
+        setLastSelectedDate(end);
+        const interval = generateInterval(start, end);
+
+    }
+
+
     return (
         <Container>
             <Header>
@@ -31,7 +66,7 @@ export function Scheduling() {
                     backgroundColor='transparent'
                 />
                 <BackButton
-                    onPress={() => { }}
+                    onPress={handleBack}
                     color={theme.colors.shape}
                 />
                 <Title>
@@ -60,10 +95,16 @@ export function Scheduling() {
             </Header>
 
             <Content>
-                <Calendar />
+                <Calendar
+                    markedDates={{}}
+                    onDayPress={handleChangeDate}
+
+                />
             </Content>
             <Footer>
-                <Button title="Confirmar" />
+                <Button
+                    title="Confirmar"
+                    onPress={handleConfirmRental} />
             </Footer>
 
         </Container>

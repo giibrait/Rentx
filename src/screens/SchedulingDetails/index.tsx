@@ -4,6 +4,7 @@ import { ImageSlider } from '../../components/ImageSlider';
 import { Accessory } from '../../components/Accessory';
 import { Button } from '../../components/Button';
 
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
@@ -44,11 +45,21 @@ import {
 
 export function SchedulingDetails() {
     const theme = useTheme();
+    const navigation = useNavigation();
+
+    function handleConfirmRental() {
+        navigation.navigate('SchedulingComplete')
+    }
+
+    function handleBack() {
+        navigation.goBack();
+    }
+
     return (
         <Container>
             <Header>
                 <BackButton
-                    onPress={() => { }}
+                    onPress={handleBack}
                 />
             </Header>
             <CarImages>
@@ -109,7 +120,10 @@ export function SchedulingDetails() {
                 </RentalPrice>
             </Content>
             <Footer>
-                <Button title="Confirmar" />
+                <Button
+                    title="Alugar agora"
+                    color={theme.colors.success}
+                    onPress={handleConfirmRental} />
             </Footer>
         </Container>
     );
